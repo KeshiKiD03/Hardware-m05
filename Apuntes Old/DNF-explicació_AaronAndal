@@ -1,0 +1,70 @@
+02 - CONFIGURACIÓ
+
+Com a ROOT del sistema utilitzarem el programa DNF
+
+-y = Resposta afirmativa.
+	-y, --assumeyes
+              Automatically answer yes for all questions
+
+3. En comptes de fer servir l’editor vi farem servir vim (life is colorful!).
+
+# dnf -y install vim gvim mc
+
+Amb la comanda dnf instal·lem de forma afirmativa els paquets del VIM, GVIM I MC.
+
+És necessari instal·lar certs paquets per la configuració de Kerberos:
+
+# dnf -y install  krb5-devel krb5-workstation
+# dnf -y install pam_mount
+
+Amb la comanda dnf instal·lem de forma afirmativa els paquets del Kerberos (krb5-devel krb5-workstation) i també de PAM_MOUNT 
+
+03 - PERSONALITZACIÓ
+
+2. Ens posem com a usuari root (amb l’ordre su - ) i instal·lem el servei
+gpm; el configurarem per tenir-lo sempre disponible:
+
+# dnf -y install gpm
+
+Amb la comanda dnf instal·lem de forma afirmativa el paquet de GPM
+
+# dnf -y install pwgen
+
+Amb la comanda dnf instal·lem de forma afirmativa el paquet de PWGEN
+
+3. Repositoris de tercers.
+
+RPM Fusion:
+
+# rpm -ivh http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-24.noarch.rpm
+# rpm -ivh http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-24.noarch.rpm
+
+Amb la comanda RPM instal·larem els paquets des de les respectives URLs (http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-24.noarch.rpm i http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-24.noarch.rpm) amb atributs de -ivh (
+	-i = Mostra la informació del paquet, incloent el nom, la versió i la descripció.
+	-v = Mostra la informació del paquet en plantalla, de forma llegible. Mostra l'evolució de 		la seva instal·lació.
+	-h = hash = Mostra 50 "hash marks" tan com el arxiu del paquet es obert, depen de -v per a 		una bona presentació. 	
+)  
+
+
+Adobe flash plugin per Firefox:
+
+# dnf -y install http://linuxdownload.adobe.com/adobe-release/adobe-release-x86_64-1.0-1.noarch.rpm
+# rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-adobe-linux
+# dnf -y install flash-plugin
+
+Amb la comanda dnf instal·lem de forma afirmativa el paquet desde la URL http://linuxdownload.adobe.com/adobe-release/adobe-release-x86_64-1.0-1.noarch.rpm i flash-flugin
+Amb la comanda RPM importarem una clau GPG de /etc/pki/rpm-gpg/RPM-GPG-KEY-adobe-linux 
+
+Verifiquem la llista actual de repositoris:
+
+# dnf repolist
+
+Amb la comanda DNF repolist verifica, els respositoris. 
+Depenent de la comanda exacta, les llistes habilitades, deshabilitades o tots els dipòsits coneguts. Mostra tots els repositoris habilitats per defecte. Proporciona informació més detallada quan s'utilitza l'opció -v.
+
+
+
+FONT: 
+https://gitlab.com/jordinas/fed-at-inf/blob/master/F24/02-Configuracio.md
+https://gitlab.com/jordinas/fed-at-inf/blob/master/F24/03-Personalitzacio.md
+
