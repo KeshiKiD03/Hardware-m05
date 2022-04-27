@@ -306,23 +306,23 @@ virt-install --name fedora32-cloud \
 significat.
 
 ● 02 Escriu el conjunct d’ordres necessaries per:
-    ○ Engegar una VM ja existent
-    ○ Llistar la informació de la màquina
-    ○ Llistar la configuració XML de la màquina
-    ○ Mostrar un screenshot de la seva pantalla
-    ○ Accedir a la imatge usant un client d’escriptori remot
-    ○ Fer una pausa de l’execució de la màqina
-    ○ Reanudar la màquina i fer-ne un restart
-    ○ Llistar la informació de xarxa de la màquina.
-    ○ Aturar la màquina
-    ○ Destruir-la.
+    ○ Engegar una VM ja existent --> virsh start vm
+    ○ Llistar la informació de la màquina --> virsh dominfo vm --> Info de la VM
+    ○ Llistar la configuració XML de la màquina --> virsh dumpxml vm
+    ○ Mostrar un screenshot de la seva pantalla --> virsh snapshot current
+    ○ Accedir a la imatge usant un client d’escriptori remot --> virsh vncdisplay
+    ○ Fer una pausa de l’execució de la màqina --> virsh suspend vm
+    ○ Reanudar la màquina i fer-ne un restart --> virsh start vm ; virsh reboot vm
+    ○ Llistar la informació de xarxa de la màquina. --> `virsh net-info default`
+    ○ Aturar la màquina --> virsh shutdown vm
+    ○ Destruir-la. --> virsh destroy vm ; virsh undefined vm
 
 ● 03 Engegar una VM i treballar amb snapshots:
-    ○ Crear un snapshot
-    ○ Fer modificacions a la màquina
-    ○ Crear un segon snapshoot.
-    ○ Fer modificacions fatals a la màquina.
-    ○ Revertir la màquina a l’estat corresponent al primer snapshot.
+    ○ Crear un snapshot --> virsh snapshot-create-as --domain name --name "name" --description "first"
+    ○ Fer modificacions a la màquina --> virsh snapshot-edit --domain name
+    ○ Crear un segon snapshoot. --> virsh snapshot-create-as --domain name --name "name02" --description "second"
+    ○ Fer modificacions fatals a la màquina. --> virsh snapshot-delete --domain name --snapshotname "debian02"
+    ○ Revertir la màquina a l’estat corresponent al primer snapshot. --> snapshot-revert --domain debian10 --snapshotname debian10 --running
 
 ## QEMU
 
@@ -332,15 +332,34 @@ Amb les eines de qemu es poden visualitzar les VM de manera ràpida sense engega
 
 ● 01 Engega usant qemu un DSL linux com per exemple alpine.
 
+qemu-system-x86_64 -cdrom alpine.iso -vga std -m 512
+
 ● 02 Engega usant qmeu el gparted live acompanyat d’una imatge qcow2 de disc, com
 per exemple el debian11.
+
+dd if=/dev/zero of=file.raw bs=1k count=100k
+
+qemu-img convert -f raw -O qcow2 file.raw file.qcow2
+
+----
+
+qemu-system-x86_64 -cdrom gparted-live-1.4.0-1-amd64.iso -hda file.qcow2 -vga std -m 512
+
+qemu-system-x86_64 -cdrom gparted-live-1.4.0-1-amd64.iso -hda qcow2.qcow2 -vga std -m 512
 
 ● 03 Crear un disc raw de 2G anomenat disc01.raw. Mostrar amb info les seves
 característiques.
 42●
 
-04 Convertir un disc raw a un altre format, per exemple al format qcow2. De fet no es
+dd if=/dev/zero of=disk01.raw bs=1k count=2000k
+
+qemu-img info disk01.raw
+
+* 04 Convertir un disc raw a un altre format, per exemple al format qcow2. De fet no es
 converteix sinó que se’n genera un de nou en aquest format.
+
+
+qemu-img convert -f raw -O qcow2 file.raw file.qcow2
 
 ##
 
