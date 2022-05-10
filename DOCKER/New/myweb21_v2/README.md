@@ -7,15 +7,15 @@
 
 #### Generar una imagen
 ```
-docker build -t cristiancondol21/myweb21:v2 .
+docker build -t keshikid03/myweb21_v2 .
 ```
 
 #### Ejecutar en interactivo
 ```
-docker run --rm --name web -h web -it cristiacondolo21/myweb21:v2 /bin/bash
+docker run --rm --name web -h web -it keshikid03/myweb21_v2 /bin/bash
 ```
 
 #### Ejecutar en detach
 ```
-docker run --rm --name web -h web -d cristiancondolo21/myweb21:v2
+docker run --rm --name web -h web -d keshikid03/myweb21_v2
 ```
