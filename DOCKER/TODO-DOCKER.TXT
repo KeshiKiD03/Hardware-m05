@@ -1,0 +1,136 @@
+# NewDocker.txt
+
+Systemctl start docker enciende el 
+- El motor del Docker es Docker Engine
+
+- Docker run es un comando de docker client
+
+- Si reiniciamos un contenedor httpd se finaliza el container.
+
+- Docker top --> Miramos los permisos de dentro de los contenedores
+
+- Docker ps --> Miramos los contenedores activos
+
+- Docker start
+
+------
+
+PRÁCTICO ENTRYPOINT
+
+
+Aaron > pwd
+/media/sf_ASIX/ASIX_2K21/Documents/m05/DOCKER/entry
+Aaron > nano Dockerfile
+Aaron > docker build -t m05entry .
+Sending build context to Docker daemon  2.048kB
+Step 1/2 : FROM fedora
+latest: Pulling from library/fedora
+e1deda52ffad: Pull complete 
+Digest: sha256:cbf627299e327f564233aac6b97030f9023ca41d3453c497be2f5e8f7762d185
+Status: Downloaded newer image for fedora:latest
+ ---> 98ffdbffd207
+Step 2/2 : ENTRYPOINT ["date"]
+ ---> Running in 2716b38513ea
+Removing intermediate container 2716b38513ea
+ ---> 54b5d883569b
+Successfully built 54b5d883569b
+Successfully tagged m05entry:latest
+Aaron > docker run --rm -it m05entry 
+Tue May 31 15:46:49 UTC 2022
+Aaron > docker run --rm -it m05entry cat /etc/os-release
+date: extra operand '/etc/os-release'
+Try 'date --help' for more information.
+Aaron > docker run --rm -it m05entry +%H:%M
+15:48
+
+
+--- LE ESTAMOS PASANDO POR PARÁMETRO Y SALE LA HORA
+
+--- ENTRO SOLO EJECUTA ESE COMANDO --- CMD AUNQUE LE HAYAS PUESTO EL COMANDO PUEDES EJECUTAR OTRAS.
+
+--- docker run --ENTRYPOINT....
+
+PRACTICO CMD
+
+Aaron > ls -l
+total 0
+Aaron > pwd
+/media/sf_ASIX/ASIX_2K21/Documents/m05/DOCKER/cmd
+Aaron > nano Dockerfile
+Aaron > docker build -t m05cmd .
+Sending build context to Docker daemon  2.048kB
+Step 1/2 : FROM fedora
+ ---> 98ffdbffd207
+Step 2/2 : CMD ["date"]
+ ---> Running in 51c4b22e0697
+Removing intermediate container 51c4b22e0697
+ ---> dd7799a473dc
+Successfully built dd7799a473dc
+Successfully tagged m05cmd:latest
+Aaron > docker run --rm -it m05cmd
+Tue May 31 15:51:38 UTC 2022
+Aaron > docker run --rm -it m05cmd cat /os/release
+cat: /os/release: No such file or directory
+Aaron > docker run --rm -it m05cmd cat /etc/os/release
+cat: /etc/os/release: No such file or directory
+Aaron > docker run --rm -it m05cmd cat /etc/os-release
+NAME="Fedora Linux"
+VERSION="36 (Container Image)"
+ID=fedora
+VERSION_ID=36
+VERSION_CODENAME=""
+
+
+---- NO AGARRA ARGUMENTOS DE FUERA NO FUNCIONA EL +%H:%M
+
+docker: Error response from daemon: OCI runtime create failed: container_linux.go:380: starting 
+container process caused: exec: "+%H:%M": executable file not found in $PATH: unknown.
+
+
+
+----
+BIEN - PODEMOS CAMBIAR EL ENTRYPOINT PASANDOLE --ENTRYPOINT PERO TIENE QUE ESTAR ENTRE MEDIO
+
+Aaron > docker run --rm --entrypoint /bin/bash -it m05entry
+[root@96dc8d9c54f6 /]# exit
+exit
+
+Aaron > docker run --rm /bin/bash -it m05entry
+docker: invalid reference format.
+See 'docker run --help'.
+Aaron > docker run --rm -it m05entry /bin/bash
+date: invalid date '/bin/bash'
+Aaron > docker run --rm -it m05entry --entrypoint /bin/bash
+date: unrecognized option '--entrypoint'
+Try 'date --help' for more information.
+Aaron > docker run --entrypoint /bin/bash --rm -it m05entry
+[root@964e700a00e0 /]# 
+
+--------------
+
+IMPORTANTE TENER INSTALADO LOS SERVICIOS.
+
+
+bash opcions.sh
+bash opcions.sh calendari
+bash opcions.sh sysinfo
+
+
+  GNU nano 4.8                      Dockerfile                       Modified  
+FROM fedora
+RUN dnf -y install util-linux
+COPY ./opcions.sh /usr/bin/opcions.sh
+RUN chmod +x /usr/bin/opcions.sh
+ENTRYPOINT [ "opcions.sh" ]
+
+---
+
+HEMOS EJECUTADO EL OPCIONS.SH DENTRO DEL contenedor
+
+Aaron > docker run --rm -it m05entry --> POR DEFECTO DATE
+Aaron > docker run --rm -it m05entry sysinfo --> CAT /ETC/OS-RELEASE
+Aaron > docker run --rm -it m05entry calendari --> CAL
+
+CMD NO LEE PARAMETROS 
+
+----- VOLUMES
